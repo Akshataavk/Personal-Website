@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Akshata — Portfolio</title>
+
+  <!-- Typography: Newsreader (Literary Serif) & Plus Jakarta Sans (Clean Minimal Sans) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            serif: ['Newsreader', 'Georgia', 'serif'],
+            sans: ['"Plus Jakarta Sans"', '-apple-system', 'sans-serif'],
+          },
+          colors: {
+            canvas: '#F4EFEA',       /* Warm Cream */
+            surface: '#FAF7F2',      /* Subtle Ivory Card */
+            surfaceHover: '#FFFFFF',
+            borderTone: '#E7DFD5',   /* Gentle Warm Border */
+            borderToneHover: '#D5C9BC',
+            walnut: {
+              900: '#1A130F',
+              800: '#241B16',        /* Deep Espresso */
+              700: '#3C2E26',
+              600: '#5C483D',        /* Body text */
+              500: '#7F6759',        /* Secondary text */
+              400: '#A89283',        /* Subtle labels */
+              300: '#CFBFB2',
+            },
+            chestnut: {
+              DEFAULT: '#8B4524',    /* Rich Chestnut Brown */
+              hover: '#6E3419',
+              light: '#F5ECE6',
+            }
+          },
+          boxShadow: {
+            'subtle': '0 2px 10px rgba(36, 27, 22, 0.03)',
+            'card': '0 4px 20px -2px rgba(36, 27, 22, 0.04)',
+            'card-hover': '0 10px 25px -4px rgba(36, 27, 22, 0.07)',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #F4EFEA;
+      color: #241B16;
+      font-family: '"Plus Jakarta Sans"', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .serif-title {
+      font-family: 'Newsreader', Georgia, serif;
+    }
+
+    /* Minimalist tab active indicators */
+    .tab-btn {
+      position: relative;
+      transition: color 0.18s ease;
+      color: #7F6759;
+    }
+    .tab-btn:hover {
+      color: #241B16;
+    }
+    .tab-btn.active {
+      color: #8B4524 !important;
+      font-weight: 600;
+    }
+    .tab-btn.active::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 15%;
+      width: 70%;
+      height: 2px;
+      background-color: #8B4524;
+      border-radius: 9999px;
+    }
+
+    /* Quiet, spacious cards */
+    .card-editorial {
+      background-color: #FAF7F2;
+      border: 1px solid #E7DFD5;
+      border-radius: 1rem;
+      transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .card-editorial:hover {
+      background-color: #FFFFFF;
+      border-color: #D5C9BC;
+      box-shadow: 0 10px 25px -4px rgba(36, 27, 22, 0.06);
+      transform: translateY(-2px);
+    }
+
+    /* Tab transitions */
+    .tab-panel {
+      display: none;
+    }
+    .tab-panel.active {
+      display: block;
+      animation: tabFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    @keyframes tabFadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+
+<body class="min-h-screen flex flex-col justify-between selection:bg-chestnut-light selection:text-chestnut">
+
+  <!-- Header & Navigation -->
+  <header class="border-b border-borderTone bg-[#F4EFEA]/90 backdrop-blur-md sticky top-0 z-40">
+    <div class="max-w-3xl mx-auto px-6 h-18 py-4 flex items-center justify-between">
+      
+      <!-- Brand: 'Akshata.' with Chestnut Brown Dot -->
+      <button onclick="switchTab('overview')" class="text-left group cursor-pointer focus:outline-none">
+        <span class="serif-title text-2xl font-normal text-walnut-900 tracking-tight transition duration-200">
+          Akshata<span class="text-chestnut font-serif group-hover:opacity-70 transition">.</span>
+        </span>
+      </button>
+
+      <!-- Clean Tab Navigation (Desktop) -->
+      <nav class="hidden sm:flex items-center space-x-7 text-sm">
+        <button onclick="switchTab('overview')" id="nav-overview" class="tab-btn active py-2">
+          Overview
+        </button>
+        <button onclick="switchTab('research')" id="nav-research" class="tab-btn py-2">
+          Research &amp; Work
+        </button>
+        <button onclick="switchTab('technologies')" id="nav-technologies" class="tab-btn py-2">
+          Technologies
+        </button>
+        <button onclick="switchTab('life')" id="nav-life" class="tab-btn py-2">
+          Life
+        </button>
+      </nav>
+
+      <!-- Right Actions: Socials & Get In Touch -->
+      <div class="flex items-center space-x-3">
+        <!-- LinkedIn -->
+        <a href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer" class="text-walnut-500 hover:text-chestnut transition p-1" title="LinkedIn" aria-label="LinkedIn">
+          <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.45a1.62 1.62 0 1 0 0 3.24 1.62 1.62 0 0 0 0-3.24Z"/></svg>
+        </a>
+
+        <!-- GitHub -->
+        <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="text-walnut-500 hover:text-chestnut transition p-1" title="GitHub" aria-label="GitHub">
+          <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+        </a>
+
+        <!-- Get In Touch -->
+        <button onclick="copyContactEmail()" class="text-xs font-medium px-3 py-1.5 rounded-lg border border-chestnut text-chestnut hover:bg-chestnut hover:text-white transition cursor-pointer flex items-center gap-1.5 ml-1">
+          <i data-lucide="mail" class="w-3.5 h-3.5"></i>
+          <span id="quick-email-label">Get in touch</span>
+        </button>
+
+        <!-- Mobile hamburger toggle -->
+        <button onclick="toggleMobileNav()" class="sm:hidden text-walnut-700 p-1 rounded hover:bg-surface" aria-label="Toggle Navigation">
+          <i data-lucide="menu" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Mobile Nav Dropdown -->
+    <div id="mobile-nav" class="hidden sm:hidden border-t border-borderTone bg-surface px-6 py-3 flex flex-col space-y-2 text-sm">
+      <button onclick="switchTab('overview'); toggleMobileNav()" class="text-left py-1 text-walnut-800 font-medium">Overview</button>
+      <button onclick="switchTab('research'); toggleMobileNav()" class="text-left py-1 text-walnut-800 font-medium">Research &amp; Work</button>
+      <button onclick="switchTab('technologies'); toggleMobileNav()" class="text-left py-1 text-walnut-800 font-medium">Technologies</button>
+      <button onclick="switchTab('life'); toggleMobileNav()" class="text-left py-1 text-walnut-800 font-medium">Life</button>
+    </div>
+  </header>
+
+  <main class="max-w-3xl mx-auto px-6 py-12 flex-1 w-full">
+
+    <!-- ==================== TAB 1: OVERVIEW ==================== -->
+    <section id="tab-overview" class="tab-panel active space-y-12">
+      
+      <!-- Bio Header with Portrait -->
+      <div class="flex flex-col sm:flex-row items-start sm:items-center gap-6 pt-2">
+        <div class="relative group shrink-0">
+          <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl overflow-hidden border border-borderTone bg-surface shadow-subtle">
+            <img id="avatar-img" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80" alt="Akshata" class="w-full h-full object-cover">
+          </div>
+          <label class="absolute -bottom-1.5 -right-1.5 bg-chestnut text-white p-1.5 rounded-lg shadow cursor-pointer hover:bg-chestnut-hover transition text-xs flex items-center justify-center" title="Upload your photo">
+            <i data-lucide="camera" class="w-3.5 h-3.5"></i>
+            <input type="file" accept="image/*" class="hidden" onchange="uploadPhoto(event, 'avatar-img', 'akshata_avatar')">
+          </label>
+        </div>
+
+        <div class="space-y-2">
+          <div class="text-xs font-medium text-chestnut tracking-wide flex items-center gap-1.5">
+            <span class="w-1.5 h-1.5 rounded-full bg-chestnut"></span>
+            Ilmenau, Germany
+          </div>
+          <h1 class="serif-title text-3xl sm:text-4xl text-walnut-900 font-normal leading-tight">
+            Hi, I’m Akshata<span class="text-chestnut">.</span>
+          </h1>
+          <p class="text-walnut-600 text-[15px] sm:text-base leading-relaxed max-w-xl">
+            Master student and researcher currently exploring <span class="text-walnut-800 font-medium">OT security</span> and virtualizing digital substations at Fraunhofer, Ilmenau, after four years of product engineering experience in Bengaluru, India. Thanks for dropping by, as narcissistic as it may sound, I love that you stopped by to know more about me :P
+          </p>
+        </div>
+      </div>
+
+      <!-- 3 Airy Navigational Cards -->
+      <div class="space-y-3 pt-2">
+        <h2 class="text-xs font-semibold uppercase tracking-wider text-walnut-400">Current Focus</h2>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          
+          <div onclick="switchTab('research')" class="card-editorial p-5 cursor-pointer group flex flex-col justify-between">
+            <div class="space-y-2">
+              <span class="text-xs font-serif italic text-chestnut">HiWi Research</span>
+              <h3 class="font-medium text-sm text-walnut-800 group-hover:text-chestnut transition flex items-center justify-between">
+                Substation Virtualization
+                <i data-lucide="arrow-up-right" class="w-3.5 h-3.5 opacity-40 group-hover:opacity-100 transition"></i>
+              </h3>
+              <p class="text-xs text-walnut-500 leading-relaxed">
+                IEC 61850 protocol flows, GOOSE/SV packets, and and dynamically parsing the inout SCL files. 
+              </p>
+            </div>
+          </div>
+
+          <div onclick="switchTab('technologies')" class="card-editorial p-5 cursor-pointer group flex flex-col justify-between">
+            <div class="space-y-2">
+              <span class="text-xs font-serif italic text-walnut-500">Engineering</span>
+              <h3 class="font-medium text-sm text-walnut-800 group-hover:text-chestnut transition flex items-center justify-between">
+                OT &amp; Systems Stack
+                <i data-lucide="arrow-up-right" class="w-3.5 h-3.5 opacity-40 group-hover:opacity-100 transition"></i>
+              </h3>
+              <p class="text-xs text-walnut-500 leading-relaxed">
+                Industrial protocols, REST APIs, network namespaces, and tooling.
+              </p>
+            </div>
+          </div>
+
+          <div onclick="switchTab('life')" class="card-editorial p-5 cursor-pointer group flex flex-col justify-between">
+            <div class="space-y-2">
+              <span class="text-xs font-serif italic text-chestnut">Moments</span>
+              <h3 class="font-medium text-sm text-walnut-800 group-hover:text-chestnut transition flex items-center justify-between">
+                Life &amp; Perspectives
+                <i data-lucide="arrow-up-right" class="w-3.5 h-3.5 opacity-40 group-hover:opacity-100 transition"></i>
+              </h3>
+              <p class="text-xs text-walnut-500 leading-relaxed">
+                Mountain hiking, dancing sessions, cooking, and languages.
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ==================== TAB 2: RESEARCH & WORK ==================== -->
+    <section id="tab-research" class="tab-panel space-y-10">
+      
+      <div class="border-b border-borderTone pb-3">
+        <h2 class="serif-title text-2xl text-walnut-900 font-normal">Research &amp; Work</h2>
+        <p class="text-xs sm:text-sm text-walnut-500 mt-1">Operational technology security, substation testing, and product engineering.</p>
+      </div>
+
+      <!-- Research (Germany) -->
+      <div class="space-y-4">
+        <h3 class="text-xs font-semibold uppercase tracking-wider text-walnut-400">Research &amp; Academia (Germany)</h3>
+
+        <div class="card-editorial p-6 space-y-2.5">
+          <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1">
+            <h4 class="font-medium text-sm sm:text-base text-walnut-900">
+              Research Assistant (HiWi) — Substation Virtualization &amp; OT Security
+            </h4>
+            <span class="text-xs text-chestnut font-serif italic">Jan 2026 – Present</span>
+          </div>
+          <p class="text-xs text-walnut-400">Ilmenau, Germany</p>
+          <ul class="text-xs sm:text-sm text-walnut-600 space-y-1.5 list-disc list-inside leading-relaxed pt-1">
+            <li>Virtualizing IEC 61850 digital substation architectures to evaluate operational resilience without physical grid disruption.</li>
+            <li>Simulating containerized Intelligent Electronic Devices (IEDs) with isolated Linux network namespaces.</li>
+            <li>Analyzing GOOSE and Sampled Values (SV) multicast communication for anomaly detection.</li>
+            <li>It is actually really cool if you're an electrical engineer. I am not, so I only know what is necessary for the project. But on the software side, it is helping run the virtual IED container dynamically by using an import SCL file.</li>
+          </ul>
+        </div>
+
+        <div class="card-editorial p-6 space-y-2.5">
+          <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1">
+            <h4 class="font-medium text-sm sm:text-base text-walnut-900">
+              Cybersecurity Research Intern
+            </h4>
+            <span class="text-xs text-chestnut font-serif italic">Oct 2025 – Dec 2025</span>
+          </div>
+          <p class="text-xs text-walnut-400">Fraunhofer Institute • Germany</p>
+          <ul class="text-xs sm:text-sm text-walnut-600 space-y-1.5 list-disc list-inside leading-relaxed pt-1">
+            <li>Evaluated applied industrial security resilience and conducted vulnerability assessments on production network testbeds.</li>
+            <li>Automated testing pipelines and documented vulnerability baselines against industrial compliance guidelines.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Product Engineering (Bengaluru) -->
+      <div class="space-y-4 pt-2">
+        <h3 class="text-xs font-semibold uppercase tracking-wider text-walnut-400">Product Engineering (Bengaluru, India)</h3>
+
+        <div class="card-editorial p-6 space-y-2.5">
+          <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1">
+            <h4 class="font-medium text-sm sm:text-base text-walnut-900">Sharpsell.ai — Product Analyst</h4>
+            <span class="text-xs text-walnut-500 font-serif italic">Oct 2022 – Aug 2023</span>
+          </div>
+          <p class="text-xs text-walnut-400">Bengaluru, India</p>
+          <ul class="text-xs sm:text-sm text-walnut-600 space-y-1.5 list-disc list-inside leading-relaxed pt-1">
+            <li>Delivered sales enablement features via an Android SDK for enterprise sales teams.</li>
+            <li>Built Google Analytics product instrumentation, lifting active user adoption by 20%.</li>
+          </ul>
+        </div>
+
+        <div class="card-editorial p-6 space-y-2.5">
+          <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1">
+            <h4 class="font-medium text-sm sm:text-base text-walnut-900">EduBrite Inc (now LinkedIn) — Product Consultant</h4>
+            <span class="text-xs text-walnut-500 font-serif italic">Apr 2021 – Sep 2022</span>
+          </div>
+          <p class="text-xs text-walnut-400">Bengaluru, India</p>
+          <ul class="text-xs sm:text-sm text-walnut-600 space-y-1.5 list-disc list-inside leading-relaxed pt-1">
+            <li>Managed scalable enterprise LMS configurations for VMware and Salesforce (5,000+ active users).</li>
+            <li>Implemented rule-based hierarchical RBAC and automated API test suites using Postman.</li>
+          </ul>
+        </div>
+
+        <div class="card-editorial p-6 space-y-2.5">
+          <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1">
+            <h4 class="font-medium text-sm sm:text-base text-walnut-900">Signzy — Product Engineer</h4>
+            <span class="text-xs text-walnut-500 font-serif italic">Jul 2020 – Mar 2021</span>
+          </div>
+          <p class="text-xs text-walnut-400">Bengaluru, India</p>
+          <ul class="text-xs sm:text-sm text-walnut-600 space-y-1.5 list-disc list-inside leading-relaxed pt-1">
+            <li>Integrated real-time Video KYC APIs with Java and JavaScript for banking onboarding.</li>
+            <li>Supported ML liveness detection verification to prevent digital identity spoofing.</li>
+          </ul>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ==================== TAB 3: TECHNOLOGIES ==================== -->
+    <section id="tab-technologies" class="tab-panel space-y-8">
+      
+      <div class="border-b border-borderTone pb-3">
+        <h2 class="serif-title text-2xl text-walnut-900 font-normal">Technologies</h2>
+        <p class="text-xs sm:text-sm text-walnut-500 mt-1">Tools and environments utilized across research and engineering.</p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+        
+        <div class="card-editorial p-5 space-y-3">
+          <h3 class="text-xs font-semibold uppercase tracking-wider text-chestnut">OT &amp; Systems</h3>
+          <ul class="text-xs text-walnut-600 space-y-1.5 leading-relaxed">
+            <li>IEC 61850 (GOOSE, SV)</li>
+            <li>Wireshark</li>
+            <li>Docker Containerization</li>
+            <li>Linux Network Namespaces</li>
+            <li>Substation Simulation</li>
+          </ul>
+        </div>
+
+        <div class="card-editorial p-5 space-y-3">
+          <h3 class="text-xs font-semibold uppercase tracking-wider text-chestnut">Engineering &amp; APIs</h3>
+          <ul class="text-xs text-walnut-600 space-y-1.5 leading-relaxed">
+            <li>Python</li>
+            <li>Java</li>
+            <li>JavaScript</li>
+            <li>RESTful APIs</li>
+            <li>Postman Automation</li>
+            <li>Role-Based Access Control</li>
+          </ul>
+        </div>
+
+        <div class="card-editorial p-5 space-y-3">
+          <h3 class="text-xs font-semibold uppercase tracking-wider text-chestnut">Analysis &amp; Security</h3>
+          <ul class="text-xs text-walnut-600 space-y-1.5 leading-relaxed">
+            <li>Isolation Forest / Anomaly Detection</li>
+            <li>Vulnerability Assessment</li>
+            <li>Network Segmentation</li>
+            <li>Google Analytics</li>
+            <li>Git &amp; Version Control</li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="p-5 bg-surface rounded-xl border border-borderTone text-xs text-walnut-600 leading-relaxed">
+        <span class="font-medium text-walnut-800">Perspective:</span> I prioritize reliable defensive system architecture, deep protocol understanding, and clean documentation over collecting redundant libraries.
+      </div>
+
+    </section>
+
+    <!-- ==================== TAB 4: LIFE ==================== -->
+    <section id="tab-life" class="tab-panel space-y-8">
+      
+      <div class="border-b border-borderTone pb-3">
+        <h2 class="serif-title text-2xl text-walnut-900 font-normal">Life &amp; Moments</h2>
+        <p class="text-xs sm:text-sm text-walnut-500 mt-1">Activities and routines outside of engineering and lab work.</p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+        
+        <!-- Hiking -->
+        <div class="card-editorial rounded-xl overflow-hidden flex flex-col justify-between">
+          <div class="h-44 w-full bg-[#EAE2D7] relative overflow-hidden">
+            <img id="img-hiking" src="https://images.unsplash.com/photo-1551632811-561732d1e306?auto=format&fit=crop&w=700&q=80" alt="Hiking trail" class="w-full h-full object-cover">
+            <label class="absolute top-2.5 right-2.5 bg-chestnut text-white p-1.5 rounded-lg cursor-pointer text-xs shadow hover:bg-chestnut-hover transition" title="Upload photo">
+              <i data-lucide="camera" class="w-3.5 h-3.5"></i>
+              <input type="file" accept="image/*" class="hidden" onchange="uploadPhoto(event, 'img-hiking', 'akshata_life_hiking')">
+            </label>
+          </div>
+          <div class="p-4">
+            <h3 class="font-medium text-sm text-walnut-800">Hiking &amp; Trails</h3>
+            <p class="text-xs text-walnut-500 mt-1 leading-relaxed">Mountain summits, forest paths, and quiet headspace outdoors.</p>
+          </div>
+        </div>
+
+        <!-- Dance -->
+        <div class="card-editorial rounded-xl overflow-hidden flex flex-col justify-between">
+          <div class="h-44 w-full bg-[#EAE2D7] relative overflow-hidden">
+            <img id="img-dance" src="https://images.unsplash.com/photo-1547153760-18fc86324498?auto=format&fit=crop&w=700&q=80" alt="Dancing" class="w-full h-full object-cover">
+            <label class="absolute top-2.5 right-2.5 bg-chestnut text-white p-1.5 rounded-lg cursor-pointer text-xs shadow hover:bg-chestnut-hover transition" title="Upload photo">
+              <i data-lucide="camera" class="w-3.5 h-3.5"></i>
+              <input type="file" accept="image/*" class="hidden" onchange="uploadPhoto(event, 'img-dance', 'akshata_life_dance')">
+            </label>
+          </div>
+          <div class="p-4">
+            <h3 class="font-medium text-sm text-walnut-800">Dancing</h3>
+            <p class="text-xs text-walnut-500 mt-1 leading-relaxed">Rhythm, expression, and stepping away from screen time.</p>
+          </div>
+        </div>
+
+        <!-- Recipes -->
+        <div class="card-editorial rounded-xl overflow-hidden flex flex-col justify-between">
+          <div class="h-44 w-full bg-[#EAE2D7] relative overflow-hidden">
+            <img id="img-recipes" src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=700&q=80" alt="Cooking" class="w-full h-full object-cover">
+            <label class="absolute top-2.5 right-2.5 bg-chestnut text-white p-1.5 rounded-lg cursor-pointer text-xs shadow hover:bg-chestnut-hover transition" title="Upload photo">
+              <i data-lucide="camera" class="w-3.5 h-3.5"></i>
+              <input type="file" accept="image/*" class="hidden" onchange="uploadPhoto(event, 'img-recipes', 'akshata_life_recipes')">
+            </label>
+          </div>
+          <div class="p-4">
+            <h3 class="font-medium text-sm text-walnut-800">Trying New Recipes</h3>
+            <p class="text-xs text-walnut-500 mt-1 leading-relaxed">Kitchen experiments blending regional spices with local ingredients.</p>
+          </div>
+        </div>
+
+        <!-- Reading -->
+        <div class="card-editorial rounded-xl overflow-hidden flex flex-col justify-between">
+          <div class="h-44 w-full bg-[#EAE2D7] relative overflow-hidden">
+            <img id="img-reading" src="https://images.unsplash.com/photo-1457369804613-52c61a468e7d?auto=format&fit=crop&w=700&q=80" alt="Reading" class="w-full h-full object-cover">
+            <label class="absolute top-2.5 right-2.5 bg-chestnut text-white p-1.5 rounded-lg cursor-pointer text-xs shadow hover:bg-chestnut-hover transition" title="Upload photo">
+              <i data-lucide="camera" class="w-3.5 h-3.5"></i>
+              <input type="file" accept="image/*" class="hidden" onchange="uploadPhoto(event, 'img-reading', 'akshata_life_reading')">
+            </label>
+          </div>
+          <div class="p-4">
+            <h3 class="font-medium text-sm text-walnut-800">Languages &amp; Reading</h3>
+            <p class="text-xs text-walnut-500 mt-1 leading-relaxed">Navigating between German, Kannada, and English literature.</p>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-borderTone py-6 text-xs text-walnut-500">
+    <div class="max-w-3xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
+      <div>
+        <span class="serif-title text-sm text-walnut-900 font-normal">Akshata<span class="text-chestnut">.</span></span>
+        <span class="mx-2 text-borderTone">|</span>
+        <span>Ilmenau, Germany</span>
+      </div>
+      <div class="flex items-center space-x-5">
+        <button onclick="copyContactEmail()" class="text-chestnut hover:underline font-medium cursor-pointer">
+          Email
+        </button>
+        <a href="https://www.linkedin.com/in/akshataavk/" target="_blank" rel="noopener noreferrer" class="hover:text-chestnut transition">
+          LinkedIn
+        </a>
+        <a href="https://github.com/Akshataavk" target="_blank" rel="noopener noreferrer" class="hover:text-chestnut transition">
+          GitHub
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="fixed bottom-6 right-6 z-50 bg-walnut-900 text-white px-3.5 py-2 rounded-lg text-xs font-sans shadow-card transform translate-y-16 opacity-0 transition-all duration-300 flex items-center gap-2">
+    <i data-lucide="check" class="w-3.5 h-4.0 text-chestnut"></i>
+    <span id="toast-text">Email copied to clipboard</span>
+  </div>
+
+  <!-- Interactive JavaScript: Pure Tab Switching & LocalStorage Persistence -->
+  <script>
+    // Tab switching: Only displays the active tab
+    function switchTab(tabId) {
+      // Hide all panels
+      document.querySelectorAll('.tab-panel').forEach(panel => {
+        panel.classList.remove('active');
+      });
+
+      // Deactivate all nav buttons
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+
+      // Show selected panel
+      const targetPanel = document.getElementById('tab-' + tabId);
+      if (targetPanel) {
+        targetPanel.classList.add('active');
+      }
+
+      // Activate corresponding nav button
+      const targetBtn = document.getElementById('nav-' + tabId);
+      if (targetBtn) {
+        targetBtn.classList.add('active');
+      }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Mobile nav drawer toggle
+    function toggleMobileNav() {
+      const nav = document.getElementById('mobile-nav');
+      if (nav) nav.classList.toggle('hidden');
+    }
+
+    // Photo upload and local persistence
+    function uploadPhoto(event, imgElementId, storageKey) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const base64Data = e.target.result;
+        const img = document.getElementById(imgElementId);
+        if (img) img.src = base64Data;
+
+        try {
+          localStorage.setItem(storageKey, base64Data);
+          showToast("Photo saved!");
+        } catch (err) {
+          showToast("Photo updated for current session");
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function loadSavedPhotos() {
+      const photos = [
+        { id: 'avatar-img', key: 'akshata_avatar' },
+        { id: 'img-hiking', key: 'akshata_life_hiking' },
+        { id: 'img-dance', key: 'akshata_life_dance' },
+        { id: 'img-recipes', key: 'akshata_life_recipes' },
+        { id: 'img-reading', key: 'akshata_life_reading' }
+      ];
+
+      photos.forEach(item => {
+        const saved = localStorage.getItem(item.key);
+        if (saved) {
+          const el = document.getElementById(item.id);
+          if (el) el.src = saved;
+        }
+      });
+    }
+
+    // Quick email copy
+    function copyContactEmail() {
+      const email = "akshatavirupakshakulkarni@gmail.com";
+      const dummy = document.createElement("input");
+      dummy.value = email;
+      document.body.appendChild(dummy);
+      dummy.select();
+      document.execCommand("copy");
+      document.body.removeChild(dummy);
+
+      const label = document.getElementById('quick-email-label');
+      if (label) {
+        label.textContent = "Copied!";
+        setTimeout(() => { label.textContent = "Get in touch"; }, 2000);
+      }
+      showToast("Email copied to clipboard");
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      const text = document.getElementById('toast-text');
+      if (toast && text) {
+        text.textContent = msg;
+        toast.classList.remove('translate-y-16', 'opacity-0');
+        setTimeout(() => {
+          toast.classList.add('translate-y-16', 'opacity-0');
+        }, 2600);
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      loadSavedPhotos();
+      if (window.lucide) {
+        lucide.createIcons();
+      }
+    });
+  </script>
+
+</body>
+</html>
